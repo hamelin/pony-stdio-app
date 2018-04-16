@@ -52,7 +52,7 @@ interface Driver
 
 primitive Launch
 
-    fun ref apply(env: Env, driver: Driver tag) =>
+    fun apply(env: Env, driver: Driver tag) =>
         try
             let exit_code: _ExitCode tag = _ExitCode
             let app: App val = App(env, exit_code)?
