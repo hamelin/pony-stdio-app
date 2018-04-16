@@ -61,13 +61,25 @@ primitive Launch
             env.input(
                 recover
                     object
-                        fun apply(data: Array[U8] iso): None =>
+                        var _last_was_newline: Bool val = false
+                        fun ref apply(data: Array[U8] iso): None =>
                             let s: String val = String.from_iso_array(consume data)
-                            if is_term then
-                                env.out.write(s)
+                            try
+                                let char_last = s(s.size() - 1)?
+                                if _last_was_newline and (char_last == 4) then
+                                    env.input.dispose()
+                                else
+                                    _last_was_newline = (char_last == 10)
+                                    if is_term then
+                                        env.out.write(s)
+                                    end
+                                    driver(app, s)
+                                end
+                            else
+                                env.err.print("FATAL -- Empty data given to read from.")
+                                app.exit(-1)
                             end
-                            driver(app, s)
-                        fun dispose() =>
+                        fun ref dispose() =>
                             exit_code.get({(code: I32 val) => driver.at_end(app, code) })
                     end
                 end
