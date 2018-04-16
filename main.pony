@@ -45,8 +45,8 @@ class val App
 
 interface Driver
 
-    be at_start(app: App val)
-    be at_end(app: App val, exitcode: I32 val)
+    be at_start(app: App val) => None
+    be at_end(app: App val, exitcode: I32 val) => None
     be apply(app: App val, data: String val)
 
 
