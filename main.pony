@@ -47,7 +47,7 @@ interface Driver
 
     be at_start(app: App val) => None
     be at_end(app: App val, exitcode: I32 val) => None
-    be apply(app: App val, data: String val)
+    be bytes(app: App val, data: String val)
 
 
 primitive Launch
@@ -73,7 +73,7 @@ primitive Launch
                                     if is_term then
                                         env.out.write(s)
                                     end
-                                    driver(app, s)
+                                    driver.bytes(app, s)
                                 end
                             else
                                 env.err.print("FATAL -- Empty data given to read from.")
