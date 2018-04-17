@@ -3,7 +3,7 @@ use "files"
 
 primitive Launch
 
-    fun apply(env: Env, driver: DriverBytes tag) =>
+    fun apply(env: Env, driver: DriverBytes tag, size_buffer: USize val = 4096) =>
         try
             let exit_code: _ExitCode tag = _ExitCode
             let app: App val = App(env, exit_code)?
@@ -34,7 +34,7 @@ primitive Launch
                             exit_code.get({(code: I32 val) => driver.at_end(app, code) })
                     end
                 end,
-                4096
+                size_buffer
             )
         else
             env.err.print("FATAL -- Cannot set up basic data structure, abort.")
