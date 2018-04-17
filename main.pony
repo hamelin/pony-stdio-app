@@ -82,7 +82,8 @@ primitive Launch
                         fun ref dispose() =>
                             exit_code.get({(code: I32 val) => driver.at_end(app, code) })
                     end
-                end
+                end,
+                4096
             )
         else
             env.err.print("FATAL -- Cannot set up basic data structure, abort.")
