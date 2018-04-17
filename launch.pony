@@ -3,7 +3,7 @@ use "files"
 
 primitive Launch
 
-    fun apply(env: Env, driver: Driver tag) =>
+    fun apply(env: Env, driver: DriverBytes tag) =>
         try
             let exit_code: _ExitCode tag = _ExitCode
             let app: App val = App(env, exit_code)?
@@ -24,7 +24,7 @@ primitive Launch
                                     if is_term then
                                         env.out.write(s)
                                     end
-                                    driver.bytes(app, s)
+                                    driver(app, s)
                                 end
                             else
                                 env.err.print("FATAL -- Empty data given to read from.")

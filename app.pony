@@ -25,4 +25,3 @@ class val App
         _exit_code.set(code)
         _env.exitcode(code)
         _env.input.dispose()
-

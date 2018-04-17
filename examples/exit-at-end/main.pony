@@ -11,7 +11,7 @@ actor Main is Driver
     be at_start(app: App val) =>
         app.out.print("Will exit with code equal to standard input length.")
 
-    be bytes(app: App val, data: String val) =>
+    be apply(app: App val, data: String val) =>
         _len = _len + data.size()
         if _len > 20 then
             app.out.print("Reached 20 input bytes; exiting with code 127.")

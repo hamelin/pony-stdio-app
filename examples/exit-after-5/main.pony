@@ -11,7 +11,7 @@ actor Main is Driver
     be at_start(app: App val) =>
         app.out.print("Type characters, I will exit at the 5th.")
 
-    be bytes(app: App val, data: String val) =>
+    be apply(app: App val, data: String val) =>
         _num_ch = _num_ch + data.size()
         if _num_ch >= 5 then
             app.exit(I32.from[USize](_num_ch) - 5)

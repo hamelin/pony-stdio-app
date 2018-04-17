@@ -22,5 +22,5 @@ actor Main is Driver
             end
         )
 
-    be bytes(app: App val, data: String val) =>
+    be apply(app: App val, data: String val) =>
         app.err.print("Not supposed to get here! Received data: " + data)
