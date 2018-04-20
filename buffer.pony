@@ -32,7 +32,7 @@ actor Buffer is DriverBytes
         _delegate.at_end(app, exit_code)
 
     be apply(app: App val, data: String val) =>
-        _cache.insert_in_place(-1, data)
+        _cache.append(data)
         (let split_start, let split_end) = _find_split(_cache)
         if not (split_start is NoChunk.value()) then
             _delegate(app, _cache.substring(0, split_start))
