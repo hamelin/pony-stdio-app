@@ -42,15 +42,16 @@ actor Buffer is DriverBytes
 
 
 primitive DriverFixed
-    fun apply(delegate: DriverBuffered tag, size_chunk: USize val) =>
+    fun apply(delegate: DriverBuffered tag, size_chunk: USize val, reject_last_incomplete: Bool val = false): DriverBytes tag =>
         Buffer(
             delegate,
             {
                 (cache: String box): (ISize val, USize val) =>
                     if cache.size() >= size_chunk then
-                        (0, size_chunk)
+                        (ISize.from[USize](size_chunk), size_chunk)
                     else
                         NoChunk()
                     end
-            }
+            },
+            reject_last_incomplete
         )
