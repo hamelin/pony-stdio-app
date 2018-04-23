@@ -20,21 +20,20 @@ class iso _FindSplitSeparator is FindSplit
 
 
 primitive DriverSeparator
-    fun apply(delegate: DriverBuffered tag, find_separator: FindSeparator val, reject_last_incomplete: Bool val = false) =>
-        Buffer(delegate, _FindSplitSeparator(find_separator), reject_last_incomplete)
+    fun apply(delegate: DriverBuffered tag, find_separator: FindSeparator val): DriverBytes tag =>
+        Buffer(delegate, _FindSplitSeparator(find_separator), false)
 
 
 primitive DriverSplitBy
-    fun apply(delegate: DriverBuffered tag, separator: String val, reject_last_incomplete: Bool val = false) =>
+    fun apply(delegate: DriverBuffered tag, separator: String val): DriverBytes tag =>
         DriverSeparator(
             delegate,
-            {(cache: String box): (ISize, USize)? => (cache.find(separator)?, separator.size())},
-            reject_last_incomplete
+            {(cache: String box): (ISize, USize)? => (cache.find(separator)?, separator.size())}
         )
 
 
 primitive DriverSplitRegex
-    fun apply(delegate: DriverBuffered tag, separator: Regex val, reject_last_incomplete: Bool val = false) =>
+    fun apply(delegate: DriverBuffered tag, separator: Regex val): DriverBytes tag =>
         DriverSeparator(
             delegate,
             {
@@ -42,6 +41,5 @@ primitive DriverSplitRegex
                     // Unhappy about having to clone the full buffer, but that's the only way to get a val.
                     let m = separator(cache.clone())?
                     (ISize.from[USize](m.start_pos()), m.end_pos() + 1)
-            },
-            reject_last_incomplete
+            }
         )
