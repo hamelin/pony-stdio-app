@@ -28,7 +28,10 @@ primitive DriverSplitBy
     fun apply(delegate: DriverBuffered tag, separator: String val): DriverBytes tag =>
         DriverSeparator(
             delegate,
-            {(cache: String box): (ISize, USize)? => (cache.find(separator)?, separator.size())}
+            {(cache: String box): (ISize, USize)? =>
+                let pos = cache.find(separator)?
+                (pos, USize.from[ISize](pos) + separator.size())
+            }
         )
 
 
