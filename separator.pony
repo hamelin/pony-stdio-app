@@ -24,25 +24,34 @@ primitive DriverSeparator
         Buffer(delegate, _FindSplitSeparator(find_separator), false)
 
 
+class SeparateString is FindSeparator
+    let _separator: String val
+
+    new val create(separator: String val) =>
+        _separator = separator
+
+    fun apply(cache: String box): (ISize val, USize val)? =>
+        let pos = cache.find(_separator)?
+        (pos, USize.from[ISize](pos) + _separator.size())
+
+
 primitive DriverSplitBy
     fun apply(delegate: DriverBuffered tag, separator: String val): DriverBytes tag =>
-        DriverSeparator(
-            delegate,
-            {(cache: String box): (ISize, USize)? =>
-                let pos = cache.find(separator)?
-                (pos, USize.from[ISize](pos) + separator.size())
-            }
-        )
+        DriverSeparator(delegate, SeparateString(separator))
+
+
+class SeparateRegex is FindSeparator
+    let _separator: Regex val
+
+    new val create(separator: Regex val) =>
+        _separator = separator
+
+    fun apply(cache: String box): (ISize val, USize val)? =>
+        // Unhappy about having to clone the full buffer, but that's the only way to get a val.
+        let m = _separator(cache.clone())?
+        (ISize.from[USize](m.start_pos()), m.end_pos() + 1)
 
 
 primitive DriverSplitRegex
     fun apply(delegate: DriverBuffered tag, separator: Regex val): DriverBytes tag =>
-        DriverSeparator(
-            delegate,
-            {
-                (cache: String box): (ISize, USize)? =>
-                    // Unhappy about having to clone the full buffer, but that's the only way to get a val.
-                    let m = separator(cache.clone())?
-                    (ISize.from[USize](m.start_pos()), m.end_pos() + 1)
-            }
-        )
+        DriverSeparator(delegate, SeparateRegex(separator))
