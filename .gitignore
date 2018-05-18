@@ -5,4 +5,5 @@
 **/exit-at-end/exit-at-end
 **/buffer-4/buffer-4
 **/upcase/upcase
+**/awk-like/awk-like
 *.dSYM
