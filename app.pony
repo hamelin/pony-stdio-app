@@ -19,7 +19,7 @@ class val App
         _exit_code = exit_code
 
     fun val env_vars(prefix: String val = "", squash: Bool val = false): Map[String val, String val] val =>
-        EnvVars(_env.vars())
+        EnvVars(_env.vars, prefix, squash)
 
     fun val exit(code: I32 val = 0) =>
         _exit_code.set(code)
